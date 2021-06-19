@@ -296,11 +296,11 @@ const dummyData = {
 }
 
 export default {
-    components: {
-        Navtabs,
-        RestaurantCard,
-        RestaurantNavPills,
-        RestaurantPagination
+  components: {
+    Navtabs,
+    RestaurantCard,
+    RestaurantNavPills,
+    RestaurantPagination
   },
   data() {
     return {

@@ -7,14 +7,18 @@
         alt="Card image cap"
         width="286px"
         height="180px"
-      >
+      />
       <div class="card-body">
         <p class="card-text title-wrap">
-          <a href="#">
+          <router-link
+            :to="{ name: 'restaurant', params: { id: restaurant.id } }"
+          >
             {{ restaurant.name }}
-          </a>
+          </router-link>
         </p>
-        <span class="badge badge-secondary">{{ restaurant.Category.name }}</span>
+        <span class="badge bg-secondary">{{
+          restaurant.Category.name
+        }}</span>
         <p class="card-text text-truncate">
           {{ restaurant.description }}
         </p>
@@ -59,32 +63,32 @@
 
 <script>
 export default {
-    name: 'RestaurantCard',
-    data() {
-        return {
-            // 後續需要修改資料以使用加入最愛等功能，但因為 props 傳進來的資料無法修改，所以必須複製一份進 data 使用
-            restaurant: this.initialRestaurant
-        }
+  name: 'RestaurantCard',
+  data() {
+    return {
+      // 後續需要修改資料以使用加入最愛等功能，但因為 props 傳進來的資料無法修改，所以必須複製一份進 data 使用
+      restaurant: this.initialRestaurant,
+    };
+  },
+  methods: {
+    addToFavorite() {
+      this.restaurant.isFavorited = true;
     },
-    methods: {
-        addToFavorite() {
-            this.restaurant.isFavorited = true 
-        },
-        removeFavorite() {
-            this.restaurant.isFavorited = false
-        },
-        like() {
-            this.restaurant.isLiked = true 
-        },
-        unlike() {
-            this.restaurant.isLiked = false
-        }
+    removeFavorite() {
+      this.restaurant.isFavorited = false;
     },
-    props: {
-        initialRestaurant: {
-            type: Object,
-            required: true
-        }
-    }
-}
+    like() {
+      this.restaurant.isLiked = true;
+    },
+    unlike() {
+      this.restaurant.isLiked = false;
+    },
+  },
+  props: {
+    initialRestaurant: {
+      type: Object,
+      required: true,
+    },
+  },
+};
 </script>
