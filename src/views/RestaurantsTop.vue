@@ -23,7 +23,7 @@
             <h5 class="card-title">
               {{ restaurant.name }}
             </h5>
-            <span class="badge bg-secondary"
+            <span class="badge badge-secondary"
               >收藏數：{{ restaurant.FavoritedUsers.length }}</span
             >
             <p class="card-text">

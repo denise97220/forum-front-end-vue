@@ -12,7 +12,11 @@
         </a>
       </li>
 
-      <li class="page-item" v-for="page in totalPage" :key="page">
+      <li 
+        class="page-item" 
+        v-for="page in totalPage" 
+        :key="page"
+      >
         <router-link
           class="page-link"
           :to="{name: 'restaurants', query: { categoryId, page }}"
