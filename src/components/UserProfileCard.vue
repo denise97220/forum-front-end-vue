@@ -21,15 +21,15 @@
             <li><strong>{{ user.Followers.length }}</strong> followers (追隨者)</li>
           </ul>
           <p>
-            <a 
-              href="#" 
+            <router-link 
+              :to="{ name: 'users-edit', params: { id: user.id } } "
               v-if="user.isAdmin"
             >
               <button 
                 type="submit" 
                 class="btn btn-primary"
               >edit</button>
-            </a>
+            </router-link>
             <template v-else>
               <button 
                 type="button" 
