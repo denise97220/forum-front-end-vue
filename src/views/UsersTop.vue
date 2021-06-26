@@ -15,7 +15,7 @@
           >
         </a>
         <h2>{{ user.name }}</h2>
-        <span class="badge bg-secondary">追蹤人數：{{ user.FollowerCount }}</span>
+        <span class="badge badge-secondary">追蹤人數：{{ user.FollowerCount }}</span>
         <p class="mt-3">
           <button 
             v-if="user.isFollowed"
