@@ -8,6 +8,8 @@
     <router-link 
       :to="{name: 'admin-categories'}"
     >Categories</router-link> |
-    <a href="#">Users</a>
+    <router-link
+      :to="{name: 'admin-users'}"
+    >Users</router-link>
   </div>
 </template>
