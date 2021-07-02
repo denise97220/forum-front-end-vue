@@ -19,7 +19,7 @@
         <p class="mt-3">
           <button 
             v-if="user.isFollowed"
-            @click.stop.prevent="unFollow(user)"
+            @click.stop.prevent="unFollow(user.id)"
             type="button"
             class="btn btn-danger"
           >
@@ -27,7 +27,7 @@
           </button>
           <button 
             v-else
-            @click.stop.prevent="follow(user)" 
+            @click.stop.prevent="follow(user.id)" 
             type="button"
             class="btn btn-primary"
           >
@@ -41,48 +41,8 @@
 
 <script>
 import Navtabs from './../components/Navtabs'
-
-const users = [
-  {
-    "id": 1,
-    "name": "root",
-    "email": "root@example.com",
-    "password": "$2a$10$XaxJSOdUg2/931GxMxcJpOWAB1wmUbW5WUwM1GohFh0SyfUxHNYKG",
-    "isAdmin": true,
-    "image": null,
-    "createdAt": "2021-05-17T05:11:05.000Z",
-    "updatedAt": "2021-05-17T05:11:05.000Z",
-    "Followers": [],
-    "FollowerCount": 0,
-    "isFollowed": false
-  },
-  {
-    "id": 2,
-    "name": "user1",
-    "email": "user1@example.com",
-    "password": "$2a$10$A0B7wDm/3dqFAxjH45sXW.2ASFMgKVGKU3DH6O5VpnGSG3Bd6Y9kq",
-    "isAdmin": false,
-    "image": null,
-    "createdAt": "2021-05-17T05:11:05.000Z",
-    "updatedAt": "2021-05-17T05:11:05.000Z",
-    "Followers": [],
-    "FollowerCount": 0,
-    "isFollowed": false
-  },
-  {
-    "id": 3,
-    "name": "user2",
-    "email": "user2@example.com",
-    "password": "$2a$10$b7E1.cVoAcrTFooTp4tx4eFnxUxKizT8mVr26QYJGuhp4YbRnjB02",
-    "isAdmin": false,
-    "image": null,
-    "createdAt": "2021-05-17T05:11:05.000Z",
-    "updatedAt": "2021-05-17T05:11:05.000Z",
-    "Followers": [],
-    "FollowerCount": 0,
-    "isFollowed": false
-  }
-]
+import userAPI from './../apis/user'
+import { Toast } from './../utils/helper'
 
 export default {
     components: {
@@ -94,14 +54,80 @@ export default {
       }
     },
     methods: {
-      fetchUsers() {
-        this.users = users
+      async fetchUsers() {
+        try {
+          const { data } = await userAPI.getTopUsers()
+
+          this.users = data.users.map(user => ({
+            id: user.id,
+            name: user.name,
+            image: user.image,
+            // 改名稱
+            followerCount: user.FollowerCount,
+            isFollowed: user.isFollowed
+          }))
+
+        } catch(error) {
+          console.log(error)
+          Toast.fire({
+            icon: 'error',
+            title: '無法獲取美食達人資料，請稍後再試'
+          })
+        }
       },
-      follow(user) {
-        user.isFollowed = true
+      async follow (userId) {
+        try {
+          const { data } = await userAPI.follow({ userId })
+
+          console.log('data', data)
+
+          if (data.status !== 'success') {
+            throw new Error(data.message)
+          }
+
+          this.users = this.users.map(user => {
+            if (user.id !== userId) {
+              return user
+            } else {
+              return {
+                ...user,
+                followerCount: user.followerCount + 1,
+                isFollowed: true
+              }
+            }
+          })
+        } catch (error) {
+          Toast.fire({
+            icon: 'error',
+            title: '無法追蹤，請稍後再試'
+          })
+        }
       },
-      unFollow(user) {
-        user.isFollowed = false
+      async unFollow (userId) {
+        try {
+          const { data } = await userAPI.unFollow({ userId })
+
+          if (data.status !== 'success') {
+            throw new Error(data.message)
+          }
+
+          this.users = this.users.map(user => {
+            if (user.id !== userId) {
+              return user
+            } else {
+              return {
+                ...user,
+                followerCount: user.followerCount - 1,
+                isFollowed: false
+              }
+            }
+          })
+        } catch (error) {
+          Toast.fire({
+            icon: 'error',
+            title: '無法取消追蹤，請稍後再試'
+          })
+        }
       }
     },
     created() {

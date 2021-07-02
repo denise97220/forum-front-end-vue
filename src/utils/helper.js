@@ -3,8 +3,8 @@ import Swal from 'sweetalert2'
 // import { end } from 'worker-farm'
 
 export const apiHelper = axios.create({
-  baseURL: 'https://forum-express-api.herokuapp.com/'
-})
+  baseURL: "https://forum-express-api.herokuapp.com/api/",
+});
 
 export const Toast = Swal.mixin({
   toast: true,
